@@ -1,4 +1,9 @@
+# Django
 from django.db import models
+from django.utils import timezone
+
+# Utils
+import math
 
 # Create your models here.
 
@@ -23,6 +28,22 @@ class Vehicle(models.Model):
     def can_start(self) -> bool:
         return self.vehicle_type.max_capacity >= self.passengers
 
+    def get_distribution(self):
+        """ Return a matrix filled of booleans with the "standard distribution" 
+        in a vehicle, from top to bottom and left to right.
+        a Vehicle can have "n" rows with a maximum of 2 passengers per row.
+        the rows number depends on the vehicle max capacity."""
+        
+        seats_rows = math.ceil(self.vehicle_type.max_capacity / 2)
+        distribution = [[True, True] for row in range(seats_rows)]
+        
+        if self.passengers % 2 > 0:
+            distribution[-1][-1] = False
+        
+        return distribution
+
+                
+
 
 class Journey(models.Model):
     vehicle = models.ForeignKey(Vehicle, on_delete=models.PROTECT)
@@ -31,3 +52,5 @@ class Journey(models.Model):
 
     def __str__(self) -> str:
         return f"{self.vehicle.name} ({self.start} - {self.end})"
+
+        
