@@ -33,7 +33,7 @@ class Vehicle(models.Model):
         in a vehicle, from top to bottom and left to right.
         a Vehicle can have "n" rows with a maximum of 2 passengers per row.
         the rows number depends on the vehicle max capacity."""
-        
+
         seats_rows = math.ceil(self.vehicle_type.max_capacity / 2)
         distribution = [[True, True] for row in range(seats_rows)]
         
@@ -52,5 +52,12 @@ class Journey(models.Model):
 
     def __str__(self) -> str:
         return f"{self.vehicle.name} ({self.start} - {self.end})"
-
+    
+    def is_finished(self):
+        """ Return True if today's date is greater or equal than the end of 
+        the journey. """
+        if self.end:
+            return True if timezone.now().date() >= self.end else False
+        else:
+            return False
         

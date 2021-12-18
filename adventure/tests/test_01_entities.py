@@ -70,7 +70,7 @@ class TestVehicle:
         assert not models.validate_number_plate("AA 12 34")
 
 
-@pytest.mark.skip  # Remove
+# @pytest.mark.skip  # Remove
 class TestJourney:
     # TODO: implement "is_finished" method
     # a finished journey depends on the end value
