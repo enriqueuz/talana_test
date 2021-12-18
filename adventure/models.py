@@ -3,7 +3,7 @@ from django.db import models
 from django.utils import timezone
 
 # Utils
-import math
+import math, re
 
 # Create your models here.
 
@@ -42,8 +42,6 @@ class Vehicle(models.Model):
         
         return distribution
 
-                
-
 
 class Journey(models.Model):
     vehicle = models.ForeignKey(Vehicle, on_delete=models.PROTECT)
@@ -60,4 +58,11 @@ class Journey(models.Model):
             return True if timezone.now().date() >= self.end else False
         else:
             return False
-        
+
+def validate_number_plate(plate):
+    """ Check if plat number is valid. """
+    plate_pattern = '[A-Z][A-Z]-[0-9][0-9]-[0-9][0-9]'
+    if re.match(plate_pattern, plate):
+        return True
+    
+    return False
