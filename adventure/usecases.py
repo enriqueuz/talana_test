@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from .notifiers import Notifier
 from .repositories import JourneyRepository
+from adventure import models
 
+# Django
+from django.utils import timezone
 
 class StartJourney:
     def __init__(self, repository: JourneyRepository, notifier: Notifier):
@@ -24,4 +27,18 @@ class StartJourney:
         return journey
 
     class CantStart(Exception):
+        pass
+
+class StopJourney:
+
+    def set_params(self, serializer):
+        self.serializer = serializer
+        return self
+
+    def execute(self) -> None:
+        if self.serializer.is_valid(raise_exception=True):
+            self.serializer.save()
+            return self.serializer
+    
+    class CantStop(Exception):
         pass
